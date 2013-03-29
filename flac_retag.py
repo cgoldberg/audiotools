@@ -10,7 +10,7 @@ Re-tag flac files with artist/title meta-data from filename.
 This script takes one commandline argument: a flac filename to re-tag.
 The filename must be in the format: "Artist - Title.flac".  (spaces,
 dashes, and multiple words are fine; but must contain ' - ' to delimit
-Artist and Title.  It will clear any existing meta-data and write
+Artist and Title.  It will clear any existing metadata and write
 new tags (artist/title only) taken from the filename.
 """
 
@@ -25,7 +25,7 @@ def retag_flac(filename):
 
     audio = FLAC(filename)
     audio.clear()
-    artist, title = get_artist_title(filename)
+    artist, title = filename.rstrip('.flac').split(' - ', 1)
     audio['artist'] = artist
     audio['title'] = title
     audio.save()
@@ -34,13 +34,6 @@ def retag_flac(filename):
     print '  artist: %r' % artist
     print '  title: %r' % title
     print 'done.'
-
-
-def get_artist_title(filename):
-    pieces = filename.rstrip('.flac').split(' - ')
-    artist = pieces[0]
-    title = ' - '.join(pieces[1:])
-    return (artist, title)
 
 
 if __name__ == '__main__':
