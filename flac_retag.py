@@ -16,6 +16,7 @@ new tags (artist/title only) taken from the filename.
 
 
 import argparse
+import os
 
 from mutagen.flac import FLAC
 
@@ -25,7 +26,7 @@ def retag_flac(filename):
 
     audio = FLAC(filename)
     audio.clear()
-    artist, title = filename.rstrip('.flac').split(' - ', 1)
+    artist, title = os.path.splitext(filename)[0].split(' - ', 1)
     audio['artist'] = artist
     audio['title'] = title
     audio.save()
