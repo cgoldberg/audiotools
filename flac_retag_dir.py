@@ -5,14 +5,8 @@
 
 
 """
-Re-tag a directory of flac files with artist/title meta-data from filenames.
+Re-tag a dir of flac files with artist/title meta-data from filenames.
 
-This script takes one commandline argument: a directory name of flac
-files to re-tag.  The filenames must be in the format:
-"Artist - Title.flac".  (spaces, dashes, and multiple words are fine;
-but must contain ' - ' to delimit Artist and Title.  It will clear any
-existing metadata and write new tags (artist/title only) taken from
-the filenames.
 """
 
 
@@ -39,15 +33,11 @@ def retag_flac(filename):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('dir', nargs='?', 
-        default=os.getcwd(), help='directory name')
-    args = parser.parse_args()
-    
-    flac_files = glob.glob(os.path.join(args.dir, '*.flac'))
-    
+    flac_files = glob.glob('*.flac')
+
     for filename in flac_files:
         retag_flac(filename)
+
     print ''
     print '-' * 16
     print 'done.'
