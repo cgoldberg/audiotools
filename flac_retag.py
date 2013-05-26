@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #
 # Corey Goldberg, 2013
-# Python 2.7
 
 
 """
@@ -22,23 +21,22 @@ from mutagen.flac import FLAC
 
 
 def retag_flac(filename):
-    print '\nprocessing: %r...' % filename
-
     audio = FLAC(filename)
-    audio.clear()
+    audio.delete()
     artist, title = os.path.splitext(filename)[0].split(' - ', 1)
     audio['artist'] = artist
     audio['title'] = title
-    audio.save()
+    audio.save(deleteid3=True)
 
-    print 'cleared meta-data and tagged flac with:'
-    print '  artist: %r' % artist
-    print '  title: %r' % title
-    print 'done.'
+    print('Cleared metadata and tagged flac with:')
+    print('  artist: %r' % artist)
+    print('  title: %r' % title)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('filename', help='flac file name')
     args = parser.parse_args()
+    print('File: %r...' % args.filename)
     retag_flac(args.filename)
+    print('Done.')
