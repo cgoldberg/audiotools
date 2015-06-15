@@ -4,7 +4,7 @@
 
 
 """
-Rremove all ID3 and APE tags from an MP3 audio file.
+Remove all ID3 and APE tags from an MP3 audio file.
 
 This script takes one commandline argument: an MP3 filename. 
 It will clear any existing metadata/tags.
