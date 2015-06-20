@@ -4,7 +4,8 @@
 
 
 """
-Process current directory of MP3 & FLAC audio files.
+Walk directories, clean, and tag audio files.
+Supports MP3 and FLAC formats only.
 
 Clear pictures.
 Clear all tags and metadata.
@@ -12,12 +13,11 @@ Re-tag with 'Artist - Title' from filename.
 """
 
 
-import glob
 import os
 
 from mutagen import File
 
-dry_run = False
+
 start_dir = './test_files/.'
 
 
@@ -36,19 +36,16 @@ if __name__ == '__main__':
                     audio.delete()
                     audio['artist'] = artist
                     audio['title'] = title
-                    if not dry_run:
-                        audio.save(v1=0, v2_version=3)
-                    print(audio.pprint())
+                    audio.save(v1=0, v2_version=3)
                 elif 'audio/x-flac' in audio.mime:
                     audio.delete()
                     audio.clear_pictures()
                     audio['artist'] = artist
                     audio['title'] = title
-                    if not dry_run:
-                        audio.save(deleteid3=True)
-                    print(audio.pprint())
+                    audio.save(deleteid3=True)
                 else:
                     print('Invalid Audio File: %r' % filepath)
+                print(audio.pprint())
             print('')
     print('Done.\nProcessed %d files.' % len(files))
 
