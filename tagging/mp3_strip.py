@@ -6,7 +6,7 @@
 """
 Remove all ID3 and APE tags from an MP3 audio file.
 
-This script takes one commandline argument: an MP3 filename. 
+This script takes one commandline argument: an MP3 filename.
 It will clear any existing metadata/tags.
 """
 
@@ -22,14 +22,14 @@ def strip_tags(filename):
     print('processing: %r' % filename)
 
     f = mutagen.File(filename)
-    
+
     try:
         f.load(filename, ID3=mutagen.mp3.MP3)
         f.delete()
         f.save()
     except ValueError:
         pass
-    
+
     try:
         f.load(filename, ID3=mutagen.apev2.APEv2)
         f.delete()
