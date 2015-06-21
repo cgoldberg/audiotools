@@ -16,7 +16,6 @@ are derived from the filename.
 
 import logging
 import os
-import textwrap
 
 from mutagen import File
 
@@ -57,6 +56,6 @@ if __name__ == '__main__':
         for filename in files:
             filepath = os.path.abspath(os.path.join(root, filename))
             retag(filepath)
-    print('Done.')
-    print('Processed %d files.' % len(files))
+    logger.info('Done.')
+    logger.info('Processed %d files.' % len(files))
 
