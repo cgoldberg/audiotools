@@ -14,7 +14,9 @@ are derived from the filename.
 """
 
 
+import logging
 import os
+import textwrap
 
 from mutagen import File
 
@@ -22,14 +24,18 @@ from mutagen import File
 start_dir = './test_files/.'
 
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def retag(filepath):
-    print('Loading File: %r' % filepath)
+    logger.info('Loading File: %r' % filepath)
     audio = File(filepath, easy=True)
     if audio is None:
-        print('Invalid Audio File: %r' % filepath)
+        logger.error('Invalid Audio File: %r' % filepath)
     else:
-        artist, title = os.path.splitext(filename)[0].split(' - ', 1)
+        basename = os.path.basename(filepath)
+        artist, title = os.path.splitext(basename)[0].split(' - ', 1)
         if 'audio/x-mp3' in audio.mime:
             audio.delete()
             audio['artist'] = artist
@@ -42,9 +48,8 @@ def retag(filepath):
             audio['title'] = title
             audio.save(deleteid3=True)
         else:
-            print('Invalid Audio File: %r' % filepath)
-        print(audio.pprint())
-    print('')
+            logger.error('Invalid Audio File: %r' % filepath)
+        logger.info(audio.pprint())
 
 
 if __name__ == '__main__':
@@ -52,5 +57,6 @@ if __name__ == '__main__':
         for filename in files:
             filepath = os.path.abspath(os.path.join(root, filename))
             retag(filepath)
-    print('Done.\nProcessed %d files.' % len(files))
+    print('Done.')
+    print('Processed %d files.' % len(files))
 
