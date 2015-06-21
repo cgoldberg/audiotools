@@ -45,6 +45,21 @@ def get_artist_title_from_filename(filepath):
     return artist, title
 
 
+def clear_and_set_tags(audio, artist, title):
+    audio.delete()
+    audio['artist'] = artist
+    audio['title'] = title
+    if 'audio/x-mp3' in audio.mime:
+        audio.save(v1=0, v2_version=3)
+    elif 'audio/x-flac' in audio.mime:
+        audio.clear_pictures()
+        audio.save(deleteid3=True)
+    else:
+        msg = 'Invalid Audio File: %r' % filepath
+        logger.error(msg)
+        raise Exception(msg)
+
+
 def retag(filepath):
     logger.info('Loading File: %r' % filepath)
     audio = File(filepath, easy=True)
@@ -55,18 +70,9 @@ def retag(filepath):
             artist, title = get_artist_title_from_filename(filepath)
         except ValueError:
             return
-        if 'audio/x-mp3' in audio.mime:
-            audio.delete()
-            audio['artist'] = artist
-            audio['title'] = title
-            audio.save(v1=0, v2_version=3)
-        elif 'audio/x-flac' in audio.mime:
-            audio.delete()
-            audio.clear_pictures()
-            audio['artist'] = artist
-            audio['title'] = title
-            audio.save(deleteid3=True)
-        else:
+        try:
+            clear_and_set_tags(audio, artist, title)
+        except Exception:
             logger.error('Invalid Audio File: %r' % filepath)
         logger.info(audio.pprint())
 
