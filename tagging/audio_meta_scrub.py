@@ -27,14 +27,34 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def get_artist_title_from_filename(filepath):
+    filename = os.path.basename(filepath)
+    pieces = os.path.splitext(filename)
+    basename = pieces[0]
+    extension = pieces[1]
+    if extension.lower() not in ('.flac', '.mp3'):
+        msg = 'Invalid File Extension: %r' % extension
+        logger.error(msg)
+        raise ValueError(msg)
+    try:
+        artist, title = basename.split(' - ', 1)
+    except ValueError:
+        msg = 'No File Name Delimiter Found: %r' % filepath
+        logger.error(msg)
+        raise ValueError(msg)
+    return artist, title
+
+
 def retag(filepath):
     logger.info('Loading File: %r' % filepath)
     audio = File(filepath, easy=True)
     if audio is None:
         logger.error('Invalid Audio File: %r' % filepath)
     else:
-        basename = os.path.basename(filepath)
-        artist, title = os.path.splitext(basename)[0].split(' - ', 1)
+        try:
+            artist, title = get_artist_title_from_filename(filepath)
+        except ValueError:
+            return
         if 'audio/x-mp3' in audio.mime:
             audio.delete()
             audio['artist'] = artist
