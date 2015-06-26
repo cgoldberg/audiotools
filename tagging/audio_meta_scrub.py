@@ -9,18 +9,15 @@ Supports MP3 and FLAC formats.
 
 Filenames must be in the format: 'Artist - Title.mp3' or 'Artist - Title.flac'.
 (spaces, dashes, and multiple words are fine; but must contain " - " to delimit
-Artist and Title.  Existing metadata is deleted and new tags (artist/title only)
+Artist and Title.  Existing metadata is deleted and new tags (Artist/Title only)
 are derived from the filename.
 """
 
-
+import argparse
 import logging
 import os
 
 from mutagen import File
-
-
-start_dir = './test_files/.'
 
 
 logging.basicConfig(level=logging.INFO)
@@ -78,7 +75,13 @@ def retag(filepath):
 
 
 if __name__ == '__main__':
-    for root, dirs, files in os.walk(start_dir):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('dir', , default='.')
+    parser.add_argument('dir', nargs='?', default=os.getcwd(),
+                        help='start directory')
+    args = parser.parse_args()
+
+    for root, dirs, files in os.walk(args.dir):
         for filename in files:
             filepath = os.path.abspath(os.path.join(root, filename))
             retag(filepath)
