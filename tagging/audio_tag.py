@@ -3,11 +3,13 @@
 # MIT License
 
 """
-Clean and tag a directory of audio files.
+Tag a directory of audio files.
 
-This program processes a directory of MP3/FLAC audio files.
-It deletes existing metadata tags each track with an
-Artist and Title derived from the file's name.
+ * Recurses into subdirectories and re-writes metadata in MP3/FLAC files
+ * Edits are done in-place
+ * Any existing metadata and tags are deleted
+ * Writes new tags for Artist and Title
+ * New tags are taken from the filename so files must be named as expected
 
 Files must be named in the format:
 `ARTIST - TITLE.mp3` or `ARTIST - TITLE.flac`
