@@ -5,16 +5,16 @@
 """
 Tag a directory of audio files.
 
- * Recurses into subdirectories and re-writes metadata in MP3/FLAC files
+ * Re-writes metadata in MP3/FLAC audio files
  * Edits are done in-place
- * Any existing metadata and tags are deleted
- * Writes new tags for Artist and Title
- * New tags are taken from the filename so files must be named as expected
+ * Existing metadata and tags are deleted
+ * Metadata and tags for Artist and Title are added
+ * New tags are taken from the filename (files must be named as expected)
 
-Files must be named in the format:
+Filenames must be named in the format:
 `ARTIST - TITLE.mp3` or `ARTIST - TITLE.flac`
-That is, they must contain " - " to delimit artist and title,
-and end with a valid extension (".mp3" or ".flac").
+That is, they must contain a delimiter (" - ") between Artist and Title,
+and end with a valid extension (".mp3" or ".flac")
 
 Requires:
   * TagLib (audio metadata C++ library)
