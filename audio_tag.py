@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 #
 # Corey Goldberg, 2015-2025
 # MIT License
