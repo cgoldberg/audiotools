@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Corey Goldberg, 2017, 2018
+#
+# Corey Goldberg, 2017-2025
 # MIT License
 
 """
