@@ -41,7 +41,7 @@ def get_artist_title_from_filename(filepath):
     try:
         artist, title = base.split(" - ", 1)
     except ValueError:
-        msg = "No File Name Delimiter Found: %r" % filepath
+        msg = f"No file name delimiter found: {filepath}"
         logger.error(msg)
         raise ValueError(msg)
     return artist, title
@@ -57,16 +57,16 @@ def clear_and_set_tags(audio, artist, title):
         audio.clear_pictures()
         audio.save(deleteid3=True)
     else:
-        msg = "Invalid Audio File: %r" % filepath
+        msg = f"Invalid audio file: {filepath}"
         logger.error(msg)
         raise Exception(msg)
 
 
 def retag(filepath):
-    logger.debug("Loading File: %r" % filepath)
+    logger.debug(f"Loading File: {filepath}")
     audio = File(filepath, easy=True)
     if audio is None:
-        logger.debug("Invalid Audio File: %r" % filepath)
+        logger.debug(f"Invalid audio file: {filepath}")
     else:
         try:
             artist, title = get_artist_title_from_filename(filepath)
@@ -75,7 +75,7 @@ def retag(filepath):
         try:
             clear_and_set_tags(audio, artist, title)
         except Exception:
-            logger.debug("Invalid Audio File: %r" % filepath)
+            logger.debug(f"Invalid audio file: {filepath}")
         logger.info("%s - %s" % (artist, title))
 
 
@@ -92,4 +92,4 @@ if __name__ == "__main__":
                 retag(filepath)
                 count += 1
 
-    logger.info(f"\nDone.\nProcessed {count} files.")
+    logger.info(f"\nDone.\nProcessed {count} audio files.")
