@@ -15,9 +15,9 @@ represents frequency, and color represents amplitude.
 import timeside
 
 
-audio_file = 'sample.wav'
+audio_file = "sample.wav"
 
 decoder = timeside.decoder.FileDecoder(audio_file)
 grapher = timeside.grapher.Spectrogram(width=1920, height=1080)
 (decoder | grapher).run()
-grapher.render('spectrogram.png')
+grapher.render("spectrogram.png")

@@ -31,7 +31,7 @@ import os
 from mutagen import File
 
 
-logging.basicConfig(level=logging.INFO, format='%(message)s')
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -39,9 +39,9 @@ def get_artist_title_from_filename(filepath):
     filename = os.path.basename(filepath)
     base = os.path.splitext(filename)[0]
     try:
-        artist, title = base.split(' - ', 1)
+        artist, title = base.split(" - ", 1)
     except ValueError:
-        msg = 'No File Name Delimiter Found: %r' % filepath
+        msg = "No File Name Delimiter Found: %r" % filepath
         logger.error(msg)
         raise ValueError(msg)
     return artist, title
@@ -49,24 +49,24 @@ def get_artist_title_from_filename(filepath):
 
 def clear_and_set_tags(audio, artist, title):
     audio.delete()
-    audio['artist'] = artist
-    audio['title'] = title
-    if 'audio/x-mp3' in audio.mime:
+    audio["artist"] = artist
+    audio["title"] = title
+    if "audio/x-mp3" in audio.mime:
         audio.save(v1=0, v2_version=3)
-    elif 'audio/x-flac' in audio.mime:
+    elif "audio/x-flac" in audio.mime:
         audio.clear_pictures()
         audio.save(deleteid3=True)
     else:
-        msg = 'Invalid Audio File: %r' % filepath
+        msg = "Invalid Audio File: %r" % filepath
         logger.error(msg)
         raise Exception(msg)
 
 
 def retag(filepath):
-    logger.debug('Loading File: %r' % filepath)
+    logger.debug("Loading File: %r" % filepath)
     audio = File(filepath, easy=True)
     if audio is None:
-        logger.debug('Invalid Audio File: %r' % filepath)
+        logger.debug("Invalid Audio File: %r" % filepath)
     else:
         try:
             artist, title = get_artist_title_from_filename(filepath)
@@ -75,22 +75,21 @@ def retag(filepath):
         try:
             clear_and_set_tags(audio, artist, title)
         except Exception:
-            logger.debug('Invalid Audio File: %r' % filepath)
-        logger.info('%s - %s' % (artist, title))
+            logger.debug("Invalid Audio File: %r" % filepath)
+        logger.info("%s - %s" % (artist, title))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('dir', nargs='?', default=os.getcwd(),
-                        help='start directory')
+    parser.add_argument("dir", nargs="?", default=os.getcwd(), help="start directory")
     args = parser.parse_args()
 
     count = 0
     for root, dirs, files in os.walk(args.dir):
         for filename in files:
-            if filename.endswith('.flac', '.mp3'):
+            if filename.endswith(".flac", ".mp3"):
                 filepath = os.path.abspath(os.path.join(root, filename))
                 retag(filepath)
                 count += 1
 
-    logger.info(f'\nDone.\nProcessed {count} files.')
+    logger.info(f"\nDone.\nProcessed {count} files.")
