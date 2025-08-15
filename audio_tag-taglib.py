@@ -39,7 +39,7 @@ def get_tags_from_filename(filepath):
     try:
         artist, title = basename.split(" - ", 1)
     except ValueError:
-        logger.error("No valid delimiter found in filename")
+        logger.error(f"No valid delimiter found in filename: {filepath}")
         sys.exit(1)
     return artist, title
 
@@ -51,15 +51,20 @@ def tag(filepath, artist, title):
     audio.removeUnsupportedProperties(audio.unsupported)
     audio.save()
     audio.close()
-    logger.info("Tagged: {} - {}".format(artist, title))
+    logger.info(f"Tagged: {artist} - {title}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("dir", nargs="?", default=os.getcwd(), help="working directory")
     args = parser.parse_args()
+
+    count = 0
     for filename in os.listdir(args.dir):
         if filename.endswith((".flac", ".mp3")):
             filepath = os.path.abspath(os.path.join(args.dir, filename))
             artist, title = get_tags_from_filename(filepath)
             tag(filepath, artist, title)
+            count += 1
+
+    logger.info(f"\nDone.\nProcessed {count} audio files.")

@@ -87,7 +87,7 @@ if __name__ == "__main__":
     count = 0
     for root, dirs, files in os.walk(args.dir):
         for filename in files:
-            if filename.endswith(".flac", ".mp3"):
+            if filename.endswith((".flac", ".mp3")):
                 filepath = os.path.abspath(os.path.join(root, filename))
                 retag(filepath)
                 count += 1
