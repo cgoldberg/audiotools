@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Corey Goldberg, 2015-2018
+# Corey Goldberg, 2015-2025
 # MIT License
 
 """
@@ -37,15 +37,9 @@ logger = logging.getLogger(__name__)
 
 def get_artist_title_from_filename(filepath):
     filename = os.path.basename(filepath)
-    pieces = os.path.splitext(filename)
-    basename = pieces[0]
-    extension = pieces[1]
-    if extension.lower() not in ('.flac', '.mp3'):
-        msg = 'Invalid File Extension: %r' % extension
-        logger.error(msg)
-        raise ValueError(msg)
+    base = os.path.splitext(filename)[0]
     try:
-        artist, title = basename.split(' - ', 1)
+        artist, title = base.split(' - ', 1)
     except ValueError:
         msg = 'No File Name Delimiter Found: %r' % filepath
         logger.error(msg)
@@ -91,8 +85,12 @@ if __name__ == '__main__':
                         help='start directory')
     args = parser.parse_args()
 
+    count = 0
     for root, dirs, files in os.walk(args.dir):
         for filename in files:
-            filepath = os.path.abspath(os.path.join(root, filename))
-            retag(filepath)
-    logger.info('\nDone.\nProcessed %d files.' % len(files))
+            if filename.endswith('.flac', '.mp3'):
+                filepath = os.path.abspath(os.path.join(root, filename))
+                retag(filepath)
+                count += 1
+
+    logger.info(f'\nDone.\nProcessed {count} files.')
